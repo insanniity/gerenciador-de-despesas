@@ -1,7 +1,5 @@
-import 'dart:math';
-
-import 'package:flutter/material.dart';
 import 'package:date_format/date_format.dart';
+import 'package:flutter/material.dart';
 import 'package:gerenciadordedespesas/services/conta_service.dart';
 import 'package:gerenciadordedespesas/services/transacao_service.dart';
 
@@ -33,7 +31,7 @@ class _CadastrarTransacaoScreenState extends State<CadastrarTransacaoScreen> {
 
   @override
   void initState() {
-    _loadContas = cs.getContaList();
+    _loadContas = _getContas();
     super.initState();
   }
 
@@ -41,7 +39,7 @@ class _CadastrarTransacaoScreenState extends State<CadastrarTransacaoScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Cadastrar Transação'),
+        title: Text( widget.tipoTransacao == 1 ? 'Cadastrar entrada' : 'Cadastrar saida'),
         backgroundColor: widget.tipoTransacao == 1 ? Colors.green : Colors.red,
       ),
       body: FutureBuilder(

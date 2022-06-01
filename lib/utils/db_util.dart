@@ -1,5 +1,5 @@
-import 'package:sqflite/sqflite.dart' as sql;
 import 'package:path/path.dart' as path;
+import 'package:sqflite/sqflite.dart' as sql;
 
 class DbUtil{
   static Future<sql.Database> database () async {
@@ -26,6 +26,21 @@ class DbUtil{
   static Future<List<Map<String, dynamic>>> getData(String table) async {
     final db = await DbUtil.database();
     return db.query(table);
+  }
+
+  static Future<List<Map<String, dynamic>>> getDataWhere (String table, String whereString, List<dynamic> whereArguments) async {
+    final db = await DbUtil.database();
+    final data = await db.query(
+        table,
+      where: whereString,
+      whereArgs: whereArguments,
+    );
+    return data.toList();
+  }
+
+  static Future<void> executeSQL(String sql, List<dynamic> arguments) async {
+    final db = await DbUtil.database();
+    db.rawUpdate(sql, arguments);
   }
 
 

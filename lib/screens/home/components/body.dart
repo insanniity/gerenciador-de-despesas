@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:gerenciadordedespesas/screens/home/components/card_conta.dart';
-import 'package:gerenciadordedespesas/screens/home/components/card_transacao.dart';
+import 'package:gerenciadordedespesas/screens/components/card_conta.dart';
+import 'package:gerenciadordedespesas/screens/components/card_transacao.dart';
+import 'package:gerenciadordedespesas/screens/transacao/transacao_screen.dart';
 import 'package:gerenciadordedespesas/services/conta_service.dart';
 import 'package:gerenciadordedespesas/services/transacao_service.dart';
 
@@ -62,8 +63,8 @@ class _BodyState extends State<Body> {
                 padding: EdgeInsets.only(left: 24, top: 32, bottom: 16, right: 24),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    Text(
+                  children: [
+                    const Text(
                       'Ultimas transações',
                       style: TextStyle(
                         fontSize: 16,
@@ -72,8 +73,12 @@ class _BodyState extends State<Body> {
                       ),
                     ),
                     InkWell(
-                      // onTap: () { print('OK')},
-                      child: Text(
+                      onTap: () {
+                        Navigator.of(context).push(
+                            MaterialPageRoute(builder: (_) =>  const TransacaoScreen())
+                        );
+                      },
+                      child: const Text(
                         'Ver todas',
                         style: TextStyle(
                           fontSize: 12,
@@ -86,7 +91,7 @@ class _BodyState extends State<Body> {
                 ),
               ),
               FutureBuilder(
-                future: _getTransacoes(),
+                future: _loadTransacoes,
                 builder: (BuildContext context, AsyncSnapshot snapshot){
                   if(snapshot.hasData){
                     _transacoes = snapshot.data;
@@ -94,7 +99,7 @@ class _BodyState extends State<Body> {
                       child: ListView.builder(
                         scrollDirection: Axis.vertical,
                         shrinkWrap: true,
-                        itemCount: _transacoes.length,
+                        itemCount: _transacoes.length > 6 ? 6 : _transacoes.length,
                         padding: const EdgeInsets.all(10),
                         itemBuilder: (context, index){
                           return cardTransacao(context, index, _transacoes[index]);
